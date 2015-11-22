@@ -1,3 +1,7 @@
+"""
+    IGNORE: Experiment to read/transmit values.
+"""
+
 import socket
 
 # create a socket object

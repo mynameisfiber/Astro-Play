@@ -1,13 +1,17 @@
+"""
+    Transmits instructions to output.
+"""
+
 import socket
 
 # create a socket object
-s = socket.socket(socket.AF_INET, socket.SOCK_STREAM) 
-host = '192.168.0.48'                          
+s = socket.socket( socket.AF_INET, socket.SOCK_STREAM )
+host = '192.168.0.48'
 port = 9999
-                            
+
 import dbm
 # open a DB. The c option opens in read/write mode and creates the file if needed.
-db = dbm.open('resistorvalues', 'c')
+db = dbm.open( 'resistorvalues', 'c' )
 
 
 
