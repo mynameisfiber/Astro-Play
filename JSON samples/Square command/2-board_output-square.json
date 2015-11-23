@@ -1,0 +1,218 @@
+{
+    "position_elements": 48, 
+
+    "resistor_values": [
+        {
+            "position": "0", 
+            "resistor": "208", 
+        }, 
+        {
+            "position": "1", 
+            "resistor": "991", 
+        }, 
+        {
+            "position": "2", 
+            "resistor": "913", 
+        }
+        {
+            "position": "3", 
+            "resistor": "556", 
+        }
+        {
+            "position": "4", 
+            "resistor": "208", 
+        }
+        {
+            "position": "5", 
+            "resistor": "991", 
+        }
+        {
+            "position": "6", 
+            "resistor": "913", 
+        }
+        {
+            "position": "7", 
+            "resistor": "556", 
+        }
+        {
+            "position": "8", 
+            "resistor": "208", 
+        }
+        {
+            "position": "9", 
+            "resistor": "991", 
+        }
+        {
+            "position": "10", 
+            "resistor": "913", 
+        }
+        {
+            "position": "11", 
+            "resistor": "556", 
+        }
+        {
+            "position": "12", 
+            "resistor": "208", 
+        }
+        {
+            "position": "13", 
+            "resistor": "991", 
+        }
+        {
+            "position": "14", 
+            "resistor": "913", 
+        }
+        {
+            "position": "15", 
+            "resistor": "556", 
+        }
+        {
+            "position": "16", 
+            "resistor": "1023", 
+        }
+        {
+            "position": "17", 
+            "resistor": "1023", 
+        }
+        {
+            "position": "18", 
+            "resistor": "1023", 
+        }
+        {
+            "position": "19", 
+            "resistor": "1023", 
+        }
+        {
+            "position": "20", 
+            "resistor": "1023", 
+        }
+        {
+            "position": "21", 
+            "resistor": "1023", 
+        }
+        {
+            "position": "22", 
+            "resistor": "1023", 
+        }
+        {
+            "position": "23", 
+            "resistor": "1023", 
+        }
+        {
+            "position": "24", 
+            "resistor": "1023", 
+        }
+        {
+            "position": "25", 
+            "resistor": "1023", 
+        }
+        {
+            "position": "26", 
+            "resistor": "1023", 
+        }
+        {
+            "position": "27", 
+            "resistor": "1023", 
+        }
+        {
+            "position": "28", 
+            "resistor": "1023", 
+        }
+        {
+            "position": "29", 
+            "resistor": "1023", 
+        }
+        {
+            "position": "30", 
+            "resistor": "1023", 
+        }
+        {
+            "position": "31", 
+            "resistor": "1023", 
+        }
+        {
+            "position": "32", 
+            "resistor": "1023", 
+        }
+        {
+            "position": "33", 
+            "resistor": "1023", 
+        }
+        {
+            "position": "34", 
+            "resistor": "1023", 
+        }
+        {
+            "position": "35", 
+            "resistor": "1023", 
+        }
+        {
+            "position": "36", 
+            "resistor": "1023", 
+        }
+        {
+            "position": "37", 
+            "resistor": "1023", 
+        }
+        {
+            "position": "38", 
+            "resistor": "1023", 
+        }
+        {
+            "position": "39", 
+            "resistor": "1023", 
+        }
+        {
+            "position": "40", 
+            "resistor": "1023", 
+        }
+        {
+            "position": "41", 
+            "resistor": "1023", 
+        }
+        {
+            "position": "42", 
+            "resistor": "1023", 
+        }
+        {
+            "position": "43", 
+            "resistor": "1023", 
+        }
+        {
+            "position": "44", 
+            "resistor": "1023", 
+        }
+        {
+            "position": "45", 
+            "resistor": "1023", 
+        }
+        {
+            "position": "46", 
+            "resistor": "1023", 
+        }
+        {
+            "position": "47", 
+            "resistor": "1023" 
+        }
+    ]
+    "button_elements": 4, 
+
+    "button_values": [
+        {
+            "button": "0", 
+            "value": "0", 
+        }, 
+        {
+            "button": "1", 
+            "value": "0", 
+        }, 
+        {
+            "button": "2", 
+            "value": "0", 
+        }, 
+        {
+            "button": "3", 
+            "value": "1", 
+        }, 
+     ]
+}
