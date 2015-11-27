@@ -1,0 +1,4 @@
+board generates JSON output (i.e. sample files)
+interpreter consults dictionary (can/should be one file?) and converts to JSON string (i.e. sample files)
+!!!!!meta-parser!!!!!
+meta-parser converts JSON to line by line JSON command pairs ( i.e. sample files)
