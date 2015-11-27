@@ -10,19 +10,60 @@ import dbm
 # Open a DB. The c option opens in read/write mode and creates the file if needed.
 db = dbm.open('resistorvalues', 'c')
 
+# Placeholder
+db["1023"] = "blank"
+
 # Directions
 db["500"] = "f"
 db["330"] = "b"
-db["1023"] = "blank"
 db["5678"] = "l"
-# Values
+db["913"] = "r"
+
+# Meatspace values
 db["470"] = "10"
+db["___"] = "20"
+db["___"] = "30"
+db["___"] = "40"
+db["___"] = "50"
+db["___"] = "60"
+db["___"] = "70"
+db["___"] = "80"
 db["6789"] = "90"
+
 # Programatic syntax
 db["604"] = "while"
-#db["XXX"] = "for"
-#db["YYY"] = "in"
-#db["ZZZ"] = "if"
+db["___"] = "for"
+db["___"] = "if"
+db["32"] = "end"
+db["109"] = "x"
+db["___"] = "y"
+db["871"] = "="
+db["___"] = "=="
+db["___"] = "!="
+db["___"] = "<"
+db["___"] = ">"
+db["___"] = "<="
+db["___"] = ">="
+db["___"] = "+"
+db["___"] = "-"
+db["___"] = "*"
+db["___"] = "/"
+db["___"] = "%"
+db["___"] = "^" # "**"
+
+
+# Programatic values
+db["___"] = "0"
+db["___"] = "1"
+db["___"] = "2"
+db["___"] = "3"
+db["___"] = "4"
+db["___"] = "5"
+db["___"] = "6"
+db["___"] = "7"
+db["___"] = "8"
+db["___"] = "9"
+
 
 print('Database created')
 

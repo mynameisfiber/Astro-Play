@@ -194,7 +194,7 @@
             "resistor": "1023"
         }
     ],
-    "button_elements": 4,
+    "button_elements": "4",
     "button_values": [
         {
             "button": "0",
