@@ -7,31 +7,31 @@
         },
         {
             "line": "1",
-            "token": "r 90"
+            "value": "r 90"
         },
         {
             "line": "2",
-            "token": "f 10"
+            "value": "f 10"
         },
         {
             "line": "3",
-            "token": " r 90"
+            "value": "r 90"
         },
         {
             "line": "4",
-            "token": "f 10"
+            "value": "f 10"
         },
         {
             "line": "5",
-            "token": "r 90"
+            "value": "r 90"
         },
         {
             "line": "6",
-            "token": "f 10"
+            "value": "f 10"
         },
         {
             "line": "7",
-            "token": "r 90"
+            "value": "r 90"
         }
     ]
 }
