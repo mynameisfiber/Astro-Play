@@ -3,30 +3,30 @@ require 'socket'
 require 'json'
 
 # @singlecmd = JSON.parse( open(File.dirname(__FILE__) + '/json_samples/1_command/3-translator_output-1cmd.json').read )
-singlecmd = File.dirname(__FILE__) + '/json_samples/1_command/3-translator_output-1cmd.json'
-squarecmd = File.dirname(__FILE__) + '/json_samples/square_command/3-translator_output-square.json'
-whilecmd = File.dirname(__FILE__) + '/json_samples/while_command/3-translator_output-while.json'
+single_cmd_input = File.dirname(__FILE__) + '/json_samples/1_command/3-translator_output-1cmd.json'
+single_cmd_output = File.dirname(__FILE__) + '/json_samples/1_command/5-robot_input-1cmd.json'
+square_cmd_input = File.dirname(__FILE__) + '/json_samples/square_command/3-translator_output-square.json'
+square_cmd_output  = File.dirname(__FILE__) + '/json_samples/square_command/5-robot_input-square.json'
+while_cmd_input = File.dirname(__FILE__) + '/json_samples/while_command/3-translator_output-while.json'
+while_cmd_output = File.dirname(__FILE__) + '/json_samples/while_command/5-robot_input-while.json'
 
-describe 'interpreter' do 
+describe 'command parser' do 
 
-  it 'converts single command string for parsing' do
-    parse_to_astrobot( singlecmd )
-    expect( @commands ).to eq( 'f 10' )
+  it 'translates single command scenario input into expected Astrobot JSON object' do
+    parse_to_astrobot( single_cmd_input )
+    expect( @output ).to eq( JSON.parse( open( single_cmd_output ).read ) )
   end
 
-  it 'converts square command string for parsing' do
-    parse_to_astrobot( squarecmd )
-    expect( @commands ).to eq( 'f 10 r 90 f 10 r 90 f 10 r 90 f 10 r 90' )
+  it 'translates square command scenario input into expected Astrobot JSON object' do
+    parse_to_astrobot( square_cmd_input )
+    expect( @output ).to eq( JSON.parse( open( square_cmd_output ).read ) )
   end
 
-  it 'converts while command string for parsing' do
-    parse_to_astrobot( whilecmd )
-    expect( @commands ).to eq( 'x = 1 while x < 4 f 10 r 90 x = x + 1 end' )
+  it 'translates while command scenario input into expected Astrobot JSON object' do
+    parse_to_astrobot( while_cmd_input )
+    expect( @output ).to eq( JSON.parse( open( while_cmd_output ).read ) )
   end
 
-  it 'test' do
-    parse_to_astrobot( whilecmd )
-    expect( @output ).to eq( "f 10 r 90 \nf 10 r 90 \nf 10 r 90 \nf 10 r 90" )
-  end
+  
 
 end
