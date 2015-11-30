@@ -1,0 +1,101 @@
+{
+    "robot_commands": 24,
+    "command_values": [
+        {
+            "line": "0",
+            "value": "f 10"
+        },
+        {
+            "line": "1",
+            "value": "f 10"
+        },
+        {
+            "line": "2",
+            "value": "l 90"
+        },
+        {
+            "line": "3",
+            "value": "f 10"
+        },
+        {
+            "line": "4",
+            "value": "f 10"
+        },
+        {
+            "line": "5",
+            "value": "r 90"
+        },
+        {
+            "line": "6",
+            "value": "f 10"
+        },
+        {
+            "line": "7",
+            "value": "l 90"
+        },
+        {
+            "line": "8",
+            "value": "f 10"
+        },
+        {
+            "line": "9",
+            "value": "f 10"
+        },
+        {
+            "line": "10",
+            "value": "f 10"
+        },
+        {
+            "line": "11",
+            "value": "l 90"
+        },
+        {
+            "line": "12",
+            "value": "f 10"
+        },
+        {
+            "line": "13",
+            "value": "r 90"
+        },
+        {
+            "line": "14",
+            "value": "f 10"
+        },
+        {
+            "line": "15",
+            "value": "f 10"
+        },
+        {
+            "line": "16",
+            "value": "l 90"
+        },
+        {
+            "line": "17",
+            "value": "f 10"
+        },
+        {
+            "line": "18",
+            "value": "f 10"
+        },
+        {
+            "line": "19",
+            "value": "f 10"
+        },
+        {
+            "line": "20",
+            "value": "r 90"
+        },
+        {
+            "line": "21",
+            "value": "r 90"
+        },
+        {
+            "line": "22",
+            "value": "r 90"
+        },
+        {
+            "line": "23",
+            "value": "r 90"
+        }
+    ]
+}

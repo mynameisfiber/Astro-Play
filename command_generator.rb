@@ -22,10 +22,14 @@ class CommandGenerator
     @object = JSON.parse( open( file ).read )
     # Collection of Regexp structures for parsing; any added structures will need to be added in least common to most common order
     # to prevent more common structures from being plucked out of the middle of less common structures
-    @structures = [  /((while|for|if) ... [0-9])/,                        # catches for, while, and if through a single number 0-9 inclusive
-                    /(((x =)|(y =)) [0-9])|(((x =)|(y =)) ... [0-9])/,    # catches assignments of x/y to a single number 0-9 including x = x + 1 format
-                    /((f|b|l|r) (10|20|30|40|50|60|70|80|90))/,           # catches robot commands, units only in tens
-                    /(end)/ ]                                             # catches 'end', any and all use cases 
+    @structures = [  /((while|for|if|elsif) (x|y) (>|<|>=|<=|==|%|\+|-|\*|\/|\*\*) [0-9]+ (== ([0-9]+|(x|y)))?)/,
+                        # catches for, while, and if through a number 0-9 inclusive with optional modulo with arithmatic and subsequent comparison
+                    /(((x =)|(y =)) [0-9]+)|(((x =)|(y =)) ... [0-9]+)/,
+                        # catches assignments of x/y to a single number 0-9 including x = x + 1 format
+                    /((f|b|l|r) (10|20|30|40|50|60|70|80|90))/,
+                        # catches robot commands, units only in tens
+                    /(end)|(else)/ ]
+                        # catches 'end' and 'else', any and all use cases 
     # Command string to be formatted and passed to robot in the event of non-executable input
     @rescue = "output.push( 'r 10' ); output.push( 'l 10' ); output.push( 'r 10' ); output.push( 'l 10' )"
     # Adds flow control method to the end of initilazation to begin command parsing and generation
@@ -47,12 +51,17 @@ class CommandGenerator
     # send_to_astro_bot
   end
 
-  # Pull pertinent data from JSON input
+  # Pull pertinent data from JSON input; puts all tokens into @raw_command_string
   def pull_commands
     # Create instance variable to hold a raw string of commands
     @raw_command_string = ""
-    # Go through the JSON object, and for each of the token_values...
+    # Go through the JSON object, and for each of the token_values
     @object[ 'token_values' ].each do | token |
+      # Check to see if the last character added to the @raw_command_string instance variable was part of a multi-digit number
+      if /[0-9]/.match( @raw_command_string[ -2 ] ) != nil && /[0-9]/.match( token[ 'token' ] ) != nil
+        # Remove the extra space at the end
+        @raw_command_string = @raw_command_string[ 0 ... -1 ]
+      end
       # ... add the value to the @raw_command_string instance variable
       @raw_command_string << "#{ token[ 'token' ] } " if  token[ 'token' ] != nil
     end
@@ -66,9 +75,9 @@ class CommandGenerator
     @structures.each do | structure |
       # Check to see if the structure can be found in the @raw_command_string created in the previous method call
       if structure.match( @raw_command_string )
-        # If any were found, loop through the found objects...
+        # If any were found, loop through the found objects
         @raw_command_string.scan( structure ).each do | caught |
-          # ... and pull out the longest array element corresponding to the whole found string
+          # Pull out the longest array element corresponding to the whole found string
           # this is necessary due to the way Ruby handles results from a regex search; creating a MatchData
           # object which can be read and treated as an array
           found = caught.to_a.compact.max_by( &:length )
@@ -78,7 +87,7 @@ class CommandGenerator
           # Holder for substitution string
           substitute = ""
           # Create substitution string using least common character I could think of, if it proves necessary, this can
-          # be swapped out for any other single character
+          # be swapped out for any other single character in the event "~" is needed down the road
           found.length.times { substitute << "~" }
           # Replace the structure in the original string ( ! = dustructive, meaning it changes the orignal object ) 
           # with the substitute string to prevent duplication
@@ -113,14 +122,14 @@ class CommandGenerator
     # Combines the disparate bits of code with ";" line separation character
     executable = eval_string_holder.join( "; " )
     # Rescue loop
-    begin
+   begin
       # Execute code string
       eval( executable )
     # If there's an error...
-    rescue Exception => exc
+   rescue Exception => exc
       # Execute the @rescue string instead ( defined in initilazation )
-      eval( @rescue )
-    end
+     eval( @rescue )
+   end
     # Assign the contents of the output holder array ( formatted robot commands )to new @command_array 
     # instance variable for access below
     @command_array = output
