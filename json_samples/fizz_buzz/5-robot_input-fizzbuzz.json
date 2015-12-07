@@ -1,101 +1,26 @@
 {
-    "robot_commands": 24,
-    "command_values": [
-        {
-            "line": "0",
-            "value": "f 10"
-        },
-        {
-            "line": "1",
-            "value": "f 10"
-        },
-        {
-            "line": "2",
-            "value": "l 90"
-        },
-        {
-            "line": "3",
-            "value": "f 10"
-        },
-        {
-            "line": "4",
-            "value": "f 10"
-        },
-        {
-            "line": "5",
-            "value": "r 90"
-        },
-        {
-            "line": "6",
-            "value": "f 10"
-        },
-        {
-            "line": "7",
-            "value": "l 90"
-        },
-        {
-            "line": "8",
-            "value": "f 10"
-        },
-        {
-            "line": "9",
-            "value": "f 10"
-        },
-        {
-            "line": "10",
-            "value": "f 10"
-        },
-        {
-            "line": "11",
-            "value": "l 90"
-        },
-        {
-            "line": "12",
-            "value": "f 10"
-        },
-        {
-            "line": "13",
-            "value": "r 90"
-        },
-        {
-            "line": "14",
-            "value": "f 10"
-        },
-        {
-            "line": "15",
-            "value": "f 10"
-        },
-        {
-            "line": "16",
-            "value": "l 90"
-        },
-        {
-            "line": "17",
-            "value": "f 10"
-        },
-        {
-            "line": "18",
-            "value": "f 10"
-        },
-        {
-            "line": "19",
-            "value": "f 10"
-        },
-        {
-            "line": "20",
-            "value": "r 90"
-        },
-        {
-            "line": "21",
-            "value": "r 90"
-        },
-        {
-            "line": "22",
-            "value": "r 90"
-        },
-        {
-            "line": "23",
-            "value": "r 90"
-        }
-    ]
+"cmd1": "f 10",
+"cmd2": "f 10",
+"cmd3": "l 90",
+"cmd4": "f 10",
+"cmd5": "f 10",
+"cmd6": "r 90",
+"cmd7": "f 10",
+"cmd8": "l 90",
+"cmd9": "f 10",
+"cmd10": "f 10",
+"cmd11": "f 10",
+"cmd12": "l 90",
+"cmd13": "f 10",
+"cmd14": "r 90",
+"cmd15": "f 10",
+"cmd16": "f 10",
+"cmd17": "l 90",
+"cmd18": "f 10",
+"cmd19": "f 10",
+"cmd20": "f 10",
+"cmd21": "r 90",
+"cmd22": "r 90",
+"cmd23": "r 90",
+"cmd24": "r 90"
 }

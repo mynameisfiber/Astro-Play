@@ -1,37 +1,10 @@
 {
-    "robot_commands": 8,
-    "command_values": [
-        {
-            "line": "0",
-            "value": "f 10"
-        },
-        {
-            "line": "1",
-            "value": "r 90"
-        },
-        {
-            "line": "2",
-            "value": "f 10"
-        },
-        {
-            "line": "3",
-            "value": "r 90"
-        },
-        {
-            "line": "4",
-            "value": "f 10"
-        },
-        {
-            "line": "5",
-            "value": "r 90"
-        },
-        {
-            "line": "6",
-            "value": "f 10"
-        },
-        {
-            "line": "7",
-            "value": "r 90"
-        }
-    ]
+"cmd1": "f 10",
+"cmd2": "r 90",
+"cmd3": "f 10",
+"cmd4": "r 90",
+"cmd5": "f 10",
+"cmd6": "r 90",
+"cmd7": "f 10",
+"cmd8": "r 90"
 }
