@@ -8,8 +8,9 @@
 
 =end
 
-# library for access to the underlying operating system socket implementations; included in standard Ruby library
-require 'socket'
+# library for access to the underlying operating system http implementations; included in standard Ruby library
+require 'net/http'
+require 'uri'
 # library for JSON implementation; included in standard Ruby library
 require 'json'
 
@@ -48,7 +49,7 @@ class CommandGenerator
     json_formatter
     # Send final formatted JSON object to robot ( details in function below )
     # Pending
-    # send_to_astro_bot
+    send_to_astro_bot
   end
 
   # Pull pertinent data from JSON input; puts all tokens into @raw_command_string
@@ -155,25 +156,44 @@ class CommandGenerator
 
   # Output to robot
   def send_to_astro_bot
-    # Pending
+    # puts @output
   end
 
 end
 
-# class AstroBotServer
-#
-#   # Socket to listen on port 9999
-#   @server = TCPServer.open( 9999 )
-#   # Servers run forever
-#   loop {
-#     Thread.start( @server.accept ) do | client |
-#       # Read complete response
-#       file = socket.read
-#       @command_generator = CommandGenerator.new( file )
-#       client.print( @command_generator.instance_variable_get( :@output ) )
-#       # Disconnect from the client
-#       client.close
-#     end
-#   }
-#
-# end
+class AstroBotServer
+
+  # initialize()
+    # Socket to listen on port 8081
+    
+    # @payload = CommandGenerator.new( File.dirname( __FILE__ ) + '/json_samples/1_command/3-translator_output-1cmd.json' )
+  # Servers run forever
+  # loop {
+  #   Thread.start( @server.accept ) do | client |
+  #     # Read complete response
+  #     file = socket.read
+  #     @command_generator = CommandGenerator.new( file )
+  #     client.print( @command_generator.instance_variable_get( :@output ) )
+  #     # Disconnect from the client
+  #     client.close
+  # end
+  # }
+
+  def post
+    host = "10.2.108.54"
+    port = "8081"
+    path = "update"
+    url = "http://" + host + ":" + port + "/" + path
+    uri = URI.parse( url )
+    http = Net::HTTP.new( uri.host, uri.port )
+
+    payload = CommandGenerator.new( File.dirname( __FILE__ ) + '/json_samples/square_command/3-translator_output-square.json' ).instance_variable_get( :@output )
+    
+    request = Net::HTTP::Post.new(uri.request_uri, initheader = {'Content-Type' =>'application/json'})
+    request.body = payload
+    resp = http.request(request)
+  end
+
+end
+
+AstroBotServer.new().post
