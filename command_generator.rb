@@ -19,11 +19,11 @@ require 'json'
 class CommandGenerator
 
   # Stardard initialization as part of generating class object; requires JSON file to be interpreted for object creation
-  def initialize( file )
+  def initialize( data )
     # Assign the opened and parsed JSON object to @object instance variable
-    @object = file
+    @object = JSON.parse( data )
     # Uncomment for test suite
-    # @object = JSON.parse( open( file ).read )
+    # @object = JSON.parse( open( data ).read )
     # Collection of Regexp structures for parsing; any added structures will need to be added in least common to most common order
     # to prevent more common structures from being plucked out of the middle of less common structures
     @structures = [  /((while|for|if|elsif) (x|y) (>|<|>=|<=|==|%|\+|-|\*|\/|\*\*) [0-9]+ (== ([0-9]+|(x|y)))?)/,
@@ -50,9 +50,6 @@ class CommandGenerator
     eval_string
     # Format into output JSON object ( details in function below )
     json_formatter
-    # Send final formatted JSON object to robot ( details in function below )
-    # Pending
-    send_to_astro_bot
   end
 
   # Pull pertinent data from JSON input; puts all tokens into @raw_command_string
@@ -112,10 +109,15 @@ class CommandGenerator
         end
       end
     end
-    # Assign to new instance variable a sorted multidimensional array consisting of all found command structures in 
-    # order of execution
-    @parsed_command_string = parse_string_holder.sort
-    # puts @parsed_command_string
+    # Check for non-valid structures, throw error
+    if @raw_command_string.gsub( /~/, '' ).gsub( / /, "" ).length > 0
+      # If there are any uncaught ( invalid ) block structures, set to false for error handling
+      @parsed_command_string = false
+    else
+      # Assign to new instance variable a sorted multidimensional array consisting of all found command structures in 
+      # order of execution
+      @parsed_command_string = parse_string_holder.sort
+    end
   end
 
   # Reassemble and eval command string for output commands
@@ -124,28 +126,36 @@ class CommandGenerator
     eval_string_holder = []
     # Local holder for final JSON output code
     output = []
-    # Go through the @parsed_command_string instance variable created above
-    @parsed_command_string.each do | subcommand |
-      # Checks to see if the commands are intended for the robot
-      if subcommand[ 1 ].match( /((f|b|l|r) (10|20|30|40|50|60|70|80|90))/ )
-        # Adds internal code to enable robot instructions to be inserted and appropriately formatted into the local output
-        # holder array
-        subcommand[ 1 ] = "output.push( '#{ subcommand[ 1 ] }' )"
+    # Check for invalid command sequence from above
+    if @parsed_command_string
+      # Go through the @parsed_command_string instance variable created above
+      @parsed_command_string.each do | subcommand |
+        # Checks to see if the commands are intended for the robot
+        if subcommand[ 1 ].match( /((f|b|l|r) (10|20|30|40|50|60|70|80|90))/ )
+          # Adds internal code to enable robot instructions to be inserted and appropriately formatted into the local output
+          # holder array
+          subcommand[ 1 ] = "output.push( '#{ subcommand[ 1 ] }' )"
+        end
+        # Adds code strings to be executed to local holder array
+        eval_string_holder << subcommand[ 1 ]
       end
-      # Adds code strings to be executed to local holder array
-      eval_string_holder << subcommand[ 1 ]
-    end
-    # Combines the disparate bits of code with ";" line separation character
-    executable = eval_string_holder.join( "; " )
-    # Rescue loop
-   begin
-      # Execute code string
-      eval( executable )
-    # If there's an error...
-   rescue Exception => exc
-      # Execute the @rescue string instead ( defined in initilazation )
-     eval( @rescue )
-   end
+      # Combines the disparate bits of code with ";" line separation character
+      executable = eval_string_holder.join( "; " )
+      # Rescue loop
+     begin
+        # Execute code string
+        eval( executable )
+      # If there's an error...
+     rescue Exception => exc
+        # Execute the @rescue string instead ( defined in initilazation )
+       eval( @rescue )
+     end
+   else
+    # Beep
+    print "\a"
+    # Rescue sequence
+    eval( @rescue )
+  end
     # Assign the contents of the output holder array ( formatted robot commands )to new @command_array 
     # instance variable for access below
     @command_array = output
@@ -169,79 +179,38 @@ class CommandGenerator
     @output = json_output.to_json
   end
 
-  # Output to robot
-  def send_to_astro_bot
-    # puts @output
-  end
-
 end
 
 class AstroBotServer
 
-  # def initialize()
-  #   # Parser parameters
-  #   @host_in = "10.0.1.3"
-  #   @port_in = 9999
-  #   @path_in = ""
-  #   # Robot parameters
-  #   @host_out = "10.2.108.54"
-  #   @port_out = "8081"
-  #   @path_out = "update"
-  # end
-
-  server = TCPServer.new("10.2.108.1", 9999)
+  server = TCPServer.new( "10.2.108.1", 9999 )
   
   # Servers run forever
   loop {
     Thread.start( server.accept ) do | client |
-
+      # Receive section
       method, path = client.gets.split                    # In this case, method = "POST" and path = "/"
       headers = {}
-      while line = client.gets.split(' ', 2)              # Collect HTTP headers
-        break if line[0] == ""                            # Blank line means no more headers
-        headers[line[0].chop] = line[1].strip             # Hash headers by type
+      while line = client.gets.split( ' ', 2 )              # Collect HTTP headers
+        break if line[ 0 ] == ""                            # Blank line means no more headers
+        headers[ line[ 0 ].chop ] = line[ 1 ].strip             # Hash headers by type
       end
-      data = client.read(headers["Content-Length"].to_i)  # Read the POST data as specified in the header
+      data = client.read( headers[ "Content-Length" ].to_i )  # Read the POST data as specified in the header
       STDERR.puts "Connection received."
       STDERR.puts data
-      payload = eval( data.gsub(/:/, "=>") )
-      puts payload
       response = "HTTP/1.1 200 OK\r\nContent-type: application/json\r\n\r\n"
       client.puts response
       client.close
-      puts "here1"
+      # Send section
       url1 = "http://10.2.108.54:8081/update"
-      puts "here2"
       uri1 = URI.parse( url1 )
-      puts "here3"
       http = Net::HTTP.new( uri1.host, uri1.port )
-      puts "here4"
-      puts payload
-      puts "here5"
-      payload = CommandGenerator.new( payload ).instance_variable_get( :@output )
-      puts "here6"
+      payload = CommandGenerator.new( data ).instance_variable_get( :@output )
       request = Net::HTTP::Post.new( uri1.request_uri, initheader = { 'Content-Type' => 'application/json' } )
-      puts "here7"
       request.body = payload
-      puts "here8"
       resp = http.request( request )
     end
   }
-
-
-  # def post( data )
-  #   puts "posting"
-  #   url = "http://" + @host_out + ":" + @port_out + "/" + @path_out
-  #   uri = URI.parse( url )
-  #   http = Net::HTTP.new( uri.host, uri.port )
-  #   payload = CommandGenerator.new( data.to_json ).instance_variable_get( :@output )
-  #   request = Net::HTTP::Post.new( uri.request_uri, initheader = { 'Content-Type' => 'application/json' } )
-  #   request.body = payload
-  #   resp = http.request( request )
-  # end
-
 end
 
 AstroBotServer.new()
-# AstroBotServer.new().post({'cmd1'=> 'f 10'})
-# AstroBotServer.new().post(File.dirname( __FILE__ ) + '/json_samples/1_command/3-translator_output-1cmd.json')
