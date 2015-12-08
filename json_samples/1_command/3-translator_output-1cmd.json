@@ -1,216 +1,52 @@
-{
-    "position_elements": 48,
-    "token_values": [
-        {
-            "position": "0",
-            "token": "f"
-        },
-        {
-            "position": "1",
-            "token": "10"
-        },
-        {
-            "position": "2",
-            "token": "blank"
-        },
-        {
-            "position": "3",
-            "token": "blank"
-        },
-        {
-            "position": "4",
-            "token": "blank"
-        },
-        {
-            "position": "5",
-            "token": "blank"
-        },
-        {
-            "position": "6",
-            "token": "blank"
-        },
-        {
-            "position": "7",
-            "token": "blank"
-        },
-        {
-            "position": "8",
-            "token": "blank"
-        },
-        {
-            "position": "9",
-            "token": "blank"
-        },
-        {
-            "position": "10",
-            "token": "blank"
-        },
-        {
-            "position": "11",
-            "token": "blank"
-        },
-        {
-            "position": "12",
-            "token": "blank"
-        },
-        {
-            "position": "13",
-            "token": "blank"
-        },
-        {
-            "position": "14",
-            "token": "blank"
-        },
-        {
-            "position": "15",
-            "token": "blank"
-        },
-        {
-            "position": "16",
-            "token": "blank"
-        },
-        {
-            "position": "17",
-            "token": "blank"
-        },
-        {
-            "position": "18",
-            "token": "blank"
-        },
-        {
-            "position": "19",
-            "token": "blank"
-        },
-        {
-            "position": "20",
-            "token": "blank"
-        },
-        {
-            "position": "21",
-            "token": "blank"
-        },
-        {
-            "position": "22",
-            "token": "blank"
-        },
-        {
-            "position": "23",
-            "token": "blank"
-        },
-        {
-            "position": "24",
-            "token": "blank"
-        },
-        {
-            "position": "25",
-            "token": "blank"
-        },
-        {
-            "position": "26",
-            "token": "blank"
-        },
-        {
-            "position": "27",
-            "token": "blank"
-        },
-        {
-            "position": "28",
-            "token": "blank"
-        },
-        {
-            "position": "29",
-            "token": "blank"
-        },
-        {
-            "position": "30",
-            "token": "blank"
-        },
-        {
-            "position": "31",
-            "token": "blank"
-        },
-        {
-            "position": "32",
-            "token": "blank"
-        },
-        {
-            "position": "33",
-            "token": "blank"
-        },
-        {
-            "position": "34",
-            "token": "blank"
-        },
-        {
-            "position": "35",
-            "token": "blank"
-        },
-        {
-            "position": "36",
-            "token": "blank"
-        },
-        {
-            "position": "37",
-            "token": "blank"
-        },
-        {
-            "position": "38",
-            "token": "blank"
-        },
-        {
-            "position": "39",
-            "token": "blank"
-        },
-        {
-            "position": "40",
-            "token": "blank"
-        },
-        {
-            "position": "41",
-            "token": "blank"
-        },
-        {
-            "position": "42",
-            "token": "blank"
-        },
-        {
-            "position": "43",
-            "token": "blank"
-        },
-        {
-            "position": "44",
-            "token": "blank"
-        },
-        {
-            "position": "45",
-            "token": "blank"
-        },
-        {
-            "position": "46",
-            "token": "blank"
-        },
-        {
-            "position": "47",
-            "token": "blank"
-        }
-    ],
-    "button_elements": 4,
-    "button_values": [
-        {
-            "button": "0",
-            "value": "0"
-        },
-        {
-            "button": "1",
-            "value": "0"
-        },
-        {
-            "button": "2",
-            "value": "0"
-        },
-        {
-            "button": "3",
-            "value": "1"
-        }
-    ]
+{"0": "f", 
+"1": "10",
+"2": "",
+"3": "",
+"4": "",
+"5": "",
+"6": "",
+"7": "",
+"8": "",
+"9": "",
+"10": "",
+"11": "",
+"12": "",
+"13": "",
+"14": "",
+"15": "",
+"16": "",
+"17": "",
+"18": "",
+"19": "",
+"20": "",
+"21": "",
+"22": "",
+"23": "",
+"24": "",
+"25": "",
+"26": "",
+"27": "",
+"28": "",
+"29": "",
+"30": "",
+"31": "",
+"32": "",
+"33": "",
+"34": "",
+"35": "",
+"36": "",
+"37": "",
+"38": "",
+"39": "",
+"40": "",
+"41": "",
+"42": "",
+"43": "",
+"44": "",
+"45": "",
+"46": "",
+"47": "",
+"48": null,
+"49": null,
+"50": null
 }

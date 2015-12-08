@@ -11,6 +11,7 @@
 # library for access to the underlying operating system http implementations; included in standard Ruby library
 require 'net/http'
 require 'uri'
+require 'socket'
 # library for JSON implementation; included in standard Ruby library
 require 'json'
 
@@ -20,7 +21,9 @@ class CommandGenerator
   # Stardard initialization as part of generating class object; requires JSON file to be interpreted for object creation
   def initialize( file )
     # Assign the opened and parsed JSON object to @object instance variable
-    @object = JSON.parse( open( file ).read )
+    @object = file
+    # Uncomment for test suite
+    # @object = JSON.parse( open( file ).read )
     # Collection of Regexp structures for parsing; any added structures will need to be added in least common to most common order
     # to prevent more common structures from being plucked out of the middle of less common structures
     @structures = [  /((while|for|if|elsif) (x|y) (>|<|>=|<=|==|%|\+|-|\*|\/|\*\*) [0-9]+ (== ([0-9]+|(x|y)))?)/,
@@ -54,18 +57,29 @@ class CommandGenerator
 
   # Pull pertinent data from JSON input; puts all tokens into @raw_command_string
   def pull_commands
+    # Array to hold/sort hash values
+    hash_holder = []
     # Create instance variable to hold a raw string of commands
     @raw_command_string = ""
     # Go through the JSON object, and for each of the token_values
-    @object[ 'token_values' ].each do | token |
+    @object.each do | key, token |
       # Check to see if the last character added to the @raw_command_string instance variable was part of a multi-digit number
-      if /[0-9]/.match( @raw_command_string[ -2 ] ) != nil && /[0-9]/.match( token[ 'token' ] ) != nil
-        # Remove the extra space at the end
-        @raw_command_string = @raw_command_string[ 0 ... -1 ]
+      if hash_holder[ -1 ] && /[0-9]/.match( hash_holder[ -1 ][ 1 ] ) != nil && /[0-9]/.match( token ) != nil
+        # Combine last two numbers
+        token = "#{ hash_holder[ -1 ][1] }#{ token }"
+        # Delete redundant number
+        hash_holder.delete_at( -1 )
       end
       # ... add the value to the @raw_command_string instance variable
-      @raw_command_string << "#{ token[ 'token' ] } " if  token[ 'token' ] != nil
+      hash_holder << [ key, token ] if  token != nil || token != ""
     end
+    # Sort array by key
+    hash_holder.sort { | a, b| a[ 0 ] <=> b[ 0 ] }.each do | pair |
+      # Delete index from final array
+      pair.delete_at( 0 )
+    end
+    # Convert array to formatted string
+    @raw_command_string = hash_holder.flatten.join( " " )
   end
 
   # Break command string into lines
@@ -101,6 +115,7 @@ class CommandGenerator
     # Assign to new instance variable a sorted multidimensional array consisting of all found command structures in 
     # order of execution
     @parsed_command_string = parse_string_holder.sort
+    # puts @parsed_command_string
   end
 
   # Reassemble and eval command string for output commands
@@ -163,37 +178,70 @@ end
 
 class AstroBotServer
 
-  # initialize()
-    # Socket to listen on port 8081
-    
-    # @payload = CommandGenerator.new( File.dirname( __FILE__ ) + '/json_samples/1_command/3-translator_output-1cmd.json' )
-  # Servers run forever
-  # loop {
-  #   Thread.start( @server.accept ) do | client |
-  #     # Read complete response
-  #     file = socket.read
-  #     @command_generator = CommandGenerator.new( file )
-  #     client.print( @command_generator.instance_variable_get( :@output ) )
-  #     # Disconnect from the client
-  #     client.close
+  # def initialize()
+  #   # Parser parameters
+  #   @host_in = "10.0.1.3"
+  #   @port_in = 9999
+  #   @path_in = ""
+  #   # Robot parameters
+  #   @host_out = "10.2.108.54"
+  #   @port_out = "8081"
+  #   @path_out = "update"
   # end
-  # }
 
-  def post
-    host = "10.2.108.54"
-    port = "8081"
-    path = "update"
-    url = "http://" + host + ":" + port + "/" + path
-    uri = URI.parse( url )
-    http = Net::HTTP.new( uri.host, uri.port )
+  server = TCPServer.new("10.2.108.1", 9999)
+  
+  # Servers run forever
+  loop {
+    Thread.start( server.accept ) do | client |
 
-    payload = CommandGenerator.new( File.dirname( __FILE__ ) + '/json_samples/square_command/3-translator_output-square.json' ).instance_variable_get( :@output )
-    
-    request = Net::HTTP::Post.new(uri.request_uri, initheader = {'Content-Type' =>'application/json'})
-    request.body = payload
-    resp = http.request(request)
-  end
+      method, path = client.gets.split                    # In this case, method = "POST" and path = "/"
+      headers = {}
+      while line = client.gets.split(' ', 2)              # Collect HTTP headers
+        break if line[0] == ""                            # Blank line means no more headers
+        headers[line[0].chop] = line[1].strip             # Hash headers by type
+      end
+      data = client.read(headers["Content-Length"].to_i)  # Read the POST data as specified in the header
+      STDERR.puts "Connection received."
+      STDERR.puts data
+      payload = eval( data.gsub(/:/, "=>") )
+      puts payload
+      response = "HTTP/1.1 200 OK\r\nContent-type: application/json\r\n\r\n"
+      client.puts response
+      client.close
+      puts "here1"
+      url1 = "http://10.2.108.54:8081/update"
+      puts "here2"
+      uri1 = URI.parse( url1 )
+      puts "here3"
+      http = Net::HTTP.new( uri1.host, uri1.port )
+      puts "here4"
+      puts payload
+      puts "here5"
+      payload = CommandGenerator.new( payload ).instance_variable_get( :@output )
+      puts "here6"
+      request = Net::HTTP::Post.new( uri1.request_uri, initheader = { 'Content-Type' => 'application/json' } )
+      puts "here7"
+      request.body = payload
+      puts "here8"
+      resp = http.request( request )
+    end
+  }
+
+
+  # def post( data )
+  #   puts "posting"
+  #   url = "http://" + @host_out + ":" + @port_out + "/" + @path_out
+  #   uri = URI.parse( url )
+  #   http = Net::HTTP.new( uri.host, uri.port )
+  #   payload = CommandGenerator.new( data.to_json ).instance_variable_get( :@output )
+  #   request = Net::HTTP::Post.new( uri.request_uri, initheader = { 'Content-Type' => 'application/json' } )
+  #   request.body = payload
+  #   resp = http.request( request )
+  # end
 
 end
 
-AstroBotServer.new().post
+AstroBotServer.new()
+# AstroBotServer.new().post({'cmd1'=> 'f 10'})
+# AstroBotServer.new().post(File.dirname( __FILE__ ) + '/json_samples/1_command/3-translator_output-1cmd.json')
