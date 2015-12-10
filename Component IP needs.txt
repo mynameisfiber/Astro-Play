@@ -1,0 +1,14 @@
+Components and there IPs
+
+Input Board    -No IPs
+
+PC             -from AP network 192.168.1.26
+	Dictionary python prog     needs to know command_generator.rb (self:9999)
+	
+	Command_generator.rb accepts (self:9999)  output to robot:8081
+	
+	Robot  accepts self:8081
+	   Wifi connection
+	   
+	   
+	     
