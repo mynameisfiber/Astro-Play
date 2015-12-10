@@ -4,10 +4,6 @@ require 'socket'
 # library for JSON implementation; included in standard Ruby library
 require 'json'
 
-@host_out = "10.2.108.1"
-@port_out = "9999"
-@path_out = ""
-
 def post
   url = "http://" + @host_out + ":" + @port_out + "/" + @path_out
   uri = URI.parse( url )

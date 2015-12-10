@@ -19,9 +19,9 @@ import re
 class CommandGenerator( object ):
 
   # Stardard initialization as part of generating class object; requires JSON file to be interpreted for object creation
-  def __init__( self, file ):
+  def __init__( self, data ):
     # Assign the opened and parsed JSON object to @object instance variable
-    self.object = open( file ) 
+    self.object = open( data ) 
     # Collection of Regexp structures for parsing; any added structures will need to be added in least common to most common order
     # to prevent more common structures from being plucked out of the middle of less common structures
     self.structures = [  re.compile('((while|for|if|elsif) (x|y) (>|<|>=|<=|==|%|\+|-|\*|\/|\*\*) [0-9]+ (== ([0-9]+|(x|y)))?)'),
@@ -48,10 +48,6 @@ class CommandGenerator( object ):
     self.eval_string(self)
     # Format into output JSON object ( details in function below )
     self.json_formatter(self)
-    # Send final formatted JSON object to robot ( details in function below )
-    # Pending
-    # self.send_to_astro_bot
-  
 
   # Pull pertinent data from JSON input; puts all tokens into @raw_command_string
   def pull_commands(self):

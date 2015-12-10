@@ -8,7 +8,7 @@
 
 =end
 
-# library for access to the underlying operating system http implementations; included in standard Ruby library
+# Libraries for access to the underlying operating system http implementations; included in standard Ruby library
 require 'net/http'
 require 'uri'
 require 'socket'
@@ -110,7 +110,7 @@ class CommandGenerator
       end
     end
     # Check for non-valid structures, throw error
-    if @raw_command_string.gsub( /~/, '' ).gsub( / /, "" ).length > 0
+    if @raw_command_string.gsub( /~/, "" ).gsub( / /, "" ).length > 0
       # If there are any uncaught ( invalid ) block structures, set to false for error handling
       @parsed_command_string = false
     else
@@ -183,32 +183,57 @@ end
 
 class AstroBotServer
 
+<<<<<<< HEAD
   server = TCPServer.new( "10.2.108.26", 9999 ) #Enter the IP of the PC where you will run this program on.
   
+=======
+  IP_address_in = "10.2.108.1"
+  port_in = 9999
+  IP_address_out = "10.2.108.54"
+  port_out = 8081
+
+  server = TCPServer.new( IP_address_in, port_in )
+  # server = TCPServer.new( "10.2.108.1", 9999 )
+  STDERR.puts "Command Generator active."
+  STDERR.puts "Address = http://#{IP_address_in}:#{port_in}"
+
+>>>>>>> 0d585fa268d365eb63ad52d1eeaf81ef74892fa4
   # Servers run forever
   loop {
     Thread.start( server.accept ) do | client |
       # Receive section
-      method, path = client.gets.split                    # In this case, method = "POST" and path = "/"
+      # In this case, method = "POST" and path = "/"
+      method, path = client.gets.split
       headers = {}
-      while line = client.gets.split( ' ', 2 )              # Collect HTTP headers
-        break if line[ 0 ] == ""                            # Blank line means no more headers
-        headers[ line[ 0 ].chop ] = line[ 1 ].strip             # Hash headers by type
+      # Collect HTTP headers
+      while line = client.gets.split( ' ', 2 )
+        # Blank line means no more headers
+        break if line[ 0 ] == ""
+        # Hash headers by type
+        headers[ line[ 0 ].chop ] = line[ 1 ].strip
       end
-      data = client.read( headers[ "Content-Length" ].to_i )  # Read the POST data as specified in the header
+      # Read the POST data as specified in the header
+      data = client.read( headers[ "Content-Length" ].to_i )
       STDERR.puts "Connection received."
+      STDERR.puts "Input @#{Time.now}:"
       STDERR.puts data
       response = "HTTP/1.1 200 OK\r\nContent-type: application/json\r\n\r\n"
       client.puts response
       client.close
       # Send section
+<<<<<<< HEAD
       url1 = "http://10.2.108.54:8081/update"  #Enter IP of target robot
+=======
+      url1 = "http://#{IP_address_out}:#{port_out}/update"
+>>>>>>> 0d585fa268d365eb63ad52d1eeaf81ef74892fa4
       uri1 = URI.parse( url1 )
       http = Net::HTTP.new( uri1.host, uri1.port )
       payload = CommandGenerator.new( data ).instance_variable_get( :@output )
       request = Net::HTTP::Post.new( uri1.request_uri, initheader = { 'Content-Type' => 'application/json' } )
       request.body = payload
       resp = http.request( request )
+      STDERR.puts "Output @#{Time.now}:"
+      STDERR.puts payload
     end
   }
 end
