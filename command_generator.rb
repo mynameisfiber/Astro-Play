@@ -228,5 +228,5 @@ class AstroBotServer
     end
   }
 end
- 
+
 AstroBotServer.new()
