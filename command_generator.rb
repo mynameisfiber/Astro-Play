@@ -183,11 +183,8 @@ end
 
 class AstroBotServer
 
-<<<<<<< HEAD
-  server = TCPServer.new( "10.2.108.26", 9999 ) #Enter the IP of the PC where you will run this program on.
-  
-=======
-  IP_address_in = "10.2.108.1"
+
+  IP_address_in = "10.2.108.26"
   port_in = 9999
   IP_address_out = "10.2.108.54"
   port_out = 8081
@@ -197,7 +194,6 @@ class AstroBotServer
   STDERR.puts "Command Generator active."
   STDERR.puts "Address = http://#{IP_address_in}:#{port_in}"
 
->>>>>>> 0d585fa268d365eb63ad52d1eeaf81ef74892fa4
   # Servers run forever
   loop {
     Thread.start( server.accept ) do | client |
@@ -221,11 +217,8 @@ class AstroBotServer
       client.puts response
       client.close
       # Send section
-<<<<<<< HEAD
-      url1 = "http://10.2.108.54:8081/update"  #Enter IP of target robot
-=======
+
       url1 = "http://#{IP_address_out}:#{port_out}/update"
->>>>>>> 0d585fa268d365eb63ad52d1eeaf81ef74892fa4
       uri1 = URI.parse( url1 )
       http = Net::HTTP.new( uri1.host, uri1.port )
       payload = CommandGenerator.new( data ).instance_variable_get( :@output )

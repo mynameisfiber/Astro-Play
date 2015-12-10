@@ -85,8 +85,6 @@ while True:
           elif 989 <= data[x] <=999:
               strdec=db.get("991",0) #10 numeric
               Tokens[x]=strdec.decode(encoding='UTF-8')
-<<<<<<< HEAD
-<<<<<<< HEAD
           elif 550 <= data[x] <=558:
               strdec=db.get("556",0) #90 degrees
               Tokens[x]=strdec.decode(encoding='UTF-8')
@@ -114,16 +112,9 @@ while True:
           elif 243 <= data[x] <=251:
               strdec=db.get("247",0) # End
               Tokens[x]=strdec.decode(encoding='UTF-8')
-=======
           elif 550 <= data[x] <=559:
               strdec=db.get("556",0) #90 degrees
               Tokens[x]=strdec.decode(encoding='UTF-8')
->>>>>>> 3cd7fd5b3fda1aa98f9bd25c062a85734facd1f7
-=======
-          elif 550 <= data[x] <=559:
-              strdec=db.get("556",0) #90 degrees
-              Tokens[x]=strdec.decode(encoding='UTF-8')
->>>>>>> 0d585fa268d365eb63ad52d1eeaf81ef74892fa4
           elif 1020 <= data[x] <=1024:
               Tokens[x]= ""      #Blank
         sortkeys = OrderedDict(sorted(Tokens.items()))
@@ -136,7 +127,7 @@ while True:
             #print(type(data_json))
             #print(data_json)
             #payload = {'json_playload': data_json }
-            r = requests.post('http://10.2.108.1:9999',data=data_json)
+            r = requests.post('http://10.2.108.26:9999',data=data_json)
             print("Done sending")
 
 		
