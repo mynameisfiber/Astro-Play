@@ -86,6 +86,7 @@ while True:
               strdec=db.get("991",0) #10 numeric
               Tokens[x]=strdec.decode(encoding='UTF-8')
 <<<<<<< HEAD
+<<<<<<< HEAD
           elif 550 <= data[x] <=558:
               strdec=db.get("556",0) #90 degrees
               Tokens[x]=strdec.decode(encoding='UTF-8')
@@ -118,6 +119,11 @@ while True:
               strdec=db.get("556",0) #90 degrees
               Tokens[x]=strdec.decode(encoding='UTF-8')
 >>>>>>> 3cd7fd5b3fda1aa98f9bd25c062a85734facd1f7
+=======
+          elif 550 <= data[x] <=559:
+              strdec=db.get("556",0) #90 degrees
+              Tokens[x]=strdec.decode(encoding='UTF-8')
+>>>>>>> 0d585fa268d365eb63ad52d1eeaf81ef74892fa4
           elif 1020 <= data[x] <=1024:
               Tokens[x]= ""      #Blank
         sortkeys = OrderedDict(sorted(Tokens.items()))
