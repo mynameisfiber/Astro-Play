@@ -127,7 +127,7 @@ while True:
             #print(type(data_json))
             #print(data_json)
             #payload = {'json_playload': data_json }
-            r = requests.post('http://10.2.108.26:9999',data=data_json)
+            r = requests.post('http://192.168.43.153:9999',data=data_json)
             print("Done sending")
 
 		
