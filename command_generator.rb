@@ -184,9 +184,9 @@ end
 class AstroBotServer
 
 
-  IP_address_in = "192.168.43.153"
+  IP_address_in = "10.2.108.26"
   port_in = 9999
-  IP_address_out = "192.168.43.36"
+  IP_address_out = "10.2.108.54"
   port_out = 8081
 
   server = TCPServer.new( IP_address_in, port_in )
