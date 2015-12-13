@@ -30,7 +30,7 @@ class CommandGenerator
                         # catches for, while, and if through a number 0-9 inclusive with optional modulo with arithmatic and subsequent comparison
                     /(((x =)|(y =)) [0-9]+)|(((x =)|(y =)) ... [0-9]+)/,
                         # catches assignments of x/y to a single number 0-9 including x = x + 1 format
-                    /((f|b|l|r) (- )?(10|20|30|40|50|60|70|80|90))/,
+                    /((f|b|l|r) (- )?(10|20|30|40|50|60|70|80|90|x))/,
                         # catches robot commands, units only in tens
                     /(end)|(else)/ ]
                         # catches 'end' and 'else', any and all use cases 
