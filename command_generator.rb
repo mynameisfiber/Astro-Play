@@ -61,7 +61,7 @@ class CommandGenerator
     # Go through the JSON object, and for each of the token_values
     @object.each do | key, token |
       # Check to see if the last character added to the @raw_command_string instance variable was part of a multi-digit number
-      if hash_holder[ -1 ] && /[0-9]/.match( hash_holder[ -1 ][ 1 ] ) != nil && /[0-9]/.match( token ) != nil
+      if hash_holder[ -1 ] && /[0-99]/.match( hash_holder[ -1 ][ 1 ] ) != nil && /[0-99]/.match( token ) != nil
         # Combine last two numbers
         token = "#{ hash_holder[ -1 ][1] }#{ token }"
         # Delete redundant number
