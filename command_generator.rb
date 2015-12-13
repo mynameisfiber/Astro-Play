@@ -21,7 +21,7 @@ class CommandGenerator
   # Stardard initialization as part of generating class object; requires JSON file to be interpreted for object creation
   def initialize( data )
     # Assign the opened and parsed JSON object to @object instance variable
-    @object = JSON.parse( data )
+      @object = JSON.parse( data )
     # Uncomment for test suite
     # @object = JSON.parse( open( data ).read )
     # Collection of Regexp structures for parsing; any added structures will need to be added in least common to most common order
