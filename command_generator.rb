@@ -1,11 +1,8 @@
 =begin
-
   Module receives JSON output from interpreter, converts series of commands into 
   executable instructions for robot. 
-
   built in Ruby version 2.1.3p242 ( 2014-09-19 revision 47630 ) [ x86_64-darwin13.0 ]
   requires only standard libraries.
-
 =end
 
 # Libraries for access to the underlying operating system http implementations; included in standard Ruby library
@@ -26,14 +23,14 @@ class CommandGenerator
     # @object = JSON.parse( open( data ).read )
     # Collection of Regexp structures for parsing; any added structures will need to be added in least common to most common order
     # to prevent more common structures from being plucked out of the middle of less common structures
-    @structures = [  /((while|for|if|elsif) (x|y) (>|<|>=|<=|==|%|\+|-|\*|\/|\*\*) [0-9]+ (== ([0-9]+|(x|y)))?)/,
-                        # catches for, while, and if through a number 0-9 inclusive with optional modulo with arithmatic and subsequent comparison
-                    /(((x =)|(y =)) [0-9]+)|(((x =)|(y =)) ... [0-9]+)/,
-                        # catches assignments of x/y to a single number 0-9 including x = x + 1 format
-                    /((f|b|l|r) (- )?(10|20|30|40|50|60|70|80|90))/,
-                        # catches robot commands, units only in tens
+    @structures = [ # catches for, while, and if through a number 0-99 inclusive with optional modulo with arithmatic and subsequent comparison
+                    /((while|for|if|elsif) (x|y) (>|<|>=|<=|==|%|\+|-|\*|\/|\*\*) [0-99]+ (== ([0-99]+|(x|y)))?)/,
+                    # catches assignments of x/y to a single number 0-99 including x = x + 1 format
+                    /(((x =)|(y =)) [0-99]+)|(((x =)|(y =)) ... [0-99]+)/,
+                    # catches robot commands, units only in tens or 'x' assigned variable
+                    /((f|b|l|r) (- )?(10|20|30|40|50|60|70|80|90|x))/,
+                    # catches 'end' and 'else', any and all use cases 
                     /(end)|(else)/ ]
-                        # catches 'end' and 'else', any and all use cases 
     # Command string to be formatted and passed to robot in the event of non-executable input
     @rescue = "output.push( 'r 10' ); output.push( 'l 10' ); output.push( 'r 10' ); output.push( 'l 10' )"
     # Adds flow control method to the end of initilazation to begin command parsing and generation
@@ -119,9 +116,27 @@ class CommandGenerator
       @parsed_command_string = parse_string_holder.sort
     end
   end
+  
+  def f( arg )
+    "output.push( 'f #{ arg }' )"
+  end
+
+  def b( arg )
+    "output.push( 'b #{ arg }' )"
+  end
+
+  def l( arg )
+    "output.push( 'l #{ arg }' )"
+  end
+  
+  def r( arg )
+    "output.push( 'r #{ arg }' )"
+  end
 
   # Reassemble and eval command string for output commands
   def eval_string
+    # Toggle for extra computation level; i.e. variables (see f/b/r/l functions above)
+    meta = false
     # Local holder for executable code strings
     eval_string_holder = []
     # Local holder for final JSON output code
@@ -135,16 +150,21 @@ class CommandGenerator
           # Adds internal code to enable robot instructions to be inserted and appropriately formatted into the local output
           # holder array
           subcommand[ 1 ] = "output.push( '#{ subcommand[ 1 ] }' )"
+        # Check for variable assignment, make sure it's not catching "if"
+        elsif subcommand[ 1 ].match( /((f|b|l|r) x)/ ) && !subcommand[ 1 ].match( /if/ )
+          # Toggle variable for extra computational level
+          meta = true
         end
         # Adds code strings to be executed to local holder array
         eval_string_holder << subcommand[ 1 ]
       end
       # Combines the disparate bits of code with ";" line separation character
       executable = eval_string_holder.join( "; " )
+      # puts eval(eval( executable ))
       # Rescue loop
      begin
-        # Execute code string
-        eval( executable )
+        # Execute code string; with extra layer if necessary
+        meta ? eval( eval( executable ) ) : eval( executable ) 
       # If there's an error...
      rescue Exception => exc
         # Execute the @rescue string instead ( defined in initilazation )

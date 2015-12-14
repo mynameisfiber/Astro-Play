@@ -10,6 +10,8 @@ while_cmd_input = File.dirname(__FILE__) + '/json_samples/while_command/3-transl
 while_cmd_output = File.dirname(__FILE__) + '/json_samples/while_command/5-robot_input-while.json'
 fizzbuzz_input = File.dirname(__FILE__) + '/json_samples/fizz_buzz/3-translator_output-fizzbuzz.json'
 fizzbuzz_output = File.dirname(__FILE__) + '/json_samples/fizz_buzz/5-robot_input-fizzbuzz.json'
+variable_input = File.dirname(__FILE__) + '/json_samples/variable/3-translator_output-variable.json'
+variable_output = File.dirname(__FILE__) + '/json_samples/variable/5-robot_input-variable.json'
 
 describe 'CommandGenerator' do 
 
@@ -33,6 +35,11 @@ describe 'CommandGenerator' do
   it 'translates fizzbuzz command scenario input into expected Astrobot JSON object' do
     command_generator = CommandGenerator.new( fizzbuzz_input )
     expect( JSON.parse( command_generator.instance_variable_get( :@output ) ) ).to eq( JSON.parse( open( fizzbuzz_output ).read ) )
+  end
+
+  it 'translates variable command scenario input into expected Astrobot JSON object' do
+    command_generator = CommandGenerator.new( variable_input )
+    expect( JSON.parse( command_generator.instance_variable_get( :@output ) ) ).to eq( JSON.parse( open( variable_output ).read ) )
   end
 
 end
