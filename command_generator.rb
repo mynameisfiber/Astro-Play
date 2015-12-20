@@ -117,6 +117,7 @@ class CommandGenerator
     end
   end
   
+  # Allows the robot to receive variables instead of only multiples of ten
   def f( arg )
     "output.push( 'f #{ arg }' )"
   end
@@ -167,8 +168,10 @@ class CommandGenerator
         meta ? eval( eval( executable ) ) : eval( executable ) 
       # If there's an error...
      rescue Exception => exc
+        # Beep
+        print "\a"
         # Execute the @rescue string instead ( defined in initilazation )
-       eval( @rescue )
+        eval( @rescue )
      end
    else
     # Beep
@@ -252,3 +255,8 @@ class AstroBotServer
 end
 
 AstroBotServer.new()
+
+
+
+
+
