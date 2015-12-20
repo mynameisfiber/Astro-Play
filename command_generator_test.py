@@ -3,19 +3,33 @@ import unittest
 import json
 from command_generator import CommandGenerator
 
+
 def assert_dict_equal(A, B):
-    assert len(A) == len(B), "Dictionaries are not the same size"
+    """
+    Check that two dictionaries, A and B, have the same keys and values
+    """
+    assert len(A) == len(B), \
+        "Dictionaries are not the same size"
     N = len(A)
-    assert len(set(A.keys()) & set(B.keys())) == N, "Dictionaries have different keys"
-    assert all(v == B[k] for k,v in A.items()), "Dictionaries have different values"
+    assert len(set(A.keys()) & set(B.keys())) == N, \
+        "Dictionaries have different keys"
+    assert all(v == B[k] for k,v in A.items()), \
+        "Dictionaries have different values"
+
 
 def process(input_file, output_file):
+    """
+    Given an input_file and outut_file, check that running the CommandGenerator
+    on the input_file results in the same data as what is represented in
+    output_file
+    """
     with open(output_file) as fd:
         output_data = json.load(fd)
     with open(input_file) as fd:
         input_raw = fd.read()
     processed_data = CommandGenerator(input_raw).output
     assert_dict_equal(processed_data, output_data)
+
 
 class TestCommandGenerator(unittest.TestCase):
     def test_command(self):

@@ -5,7 +5,8 @@ import http.server
 import http.client
 import itertools as IT
 
-STRUCTURES_STR = [  
+
+STRUCTURES_STR = [
     # catches for, while, and if through a number 0-9 inclusive with optional
     # modulo with arithmatic and subsequent comparison
     r'((while|for|if|elsif) (x|y) (>|<|>=|<=|==|%|\+|-|\*|\/|\*\*) [0-9]+ (== ([0-9]+|(x|y)))?)',
@@ -17,14 +18,19 @@ STRUCTURES_STR = [
     # catches robot commands, units only in tens
     r'((f|b|l|r) (- )?(10|20|30|40|50|60|70|80|90))',
 
-    # catches 'end' and 'else', any and all use cases 
+    # catches 'end' and 'else', any and all use cases
     r'(end)|(else)',
 ]
+
+# Now we take all the regexs defined in STRUCTURES_STR and combine them into
+# one compiled regex that can match for all the structures
 STRUCTURES = re.compile(r'({})'.format('|'.join(STRUCTURES_STR)))
 
 
-
 class InvalidCommand(Exception):
+    """
+    Exception for invalid commands in the command generator
+    """
     def __init__(self, command, line=None):
         self.command = command
         self.line = line
@@ -44,8 +50,8 @@ class CommandGenerator(object):
 
     def __init__(self, data):
         try:
-            translator_output = json.loads(data)
-            commands = self._parse_commands(translator_output)
+            data_json = json.loads(data)
+            commands = self._parse_commands(data_json)
             structures = self._parse_structure(commands)
             output = self._evaluate(structures)
         except Exception as e:
@@ -72,15 +78,25 @@ class CommandGenerator(object):
         return " ".join(commands)
 
     def _parse_structure(self, commands):
+        # structures start as a mapping from "start index of structure" =>
+        # "structure code"
         structures = {}
+        # leftovers will get re-written with '#' to mark sections we have
+        # already found
         leftover = commands
+        # use the STRUCTURES regex to find all structures in the inputted
+        # command
         for match in STRUCTURES.finditer(commands):
             start, end = match.span(0)
             structures[start] = match.group(0).strip()
             leftover = leftover[:start] + '#' * (end-start) + leftover[end:]
+        # if leftovers is only # and spaces then it only contains valid
+        # structures
         leftover = leftover.strip("# ")
         if leftover:
             raise InvalidCommand(leftover)
+        # sort the structures on their starting indexes from the original
+        # commands string
         structures_sorted = sorted(structures.items(), key=itemgetter(0))
         return map(itemgetter(1), structures_sorted)
 
@@ -92,26 +108,37 @@ class CommandGenerator(object):
         structure = []
         depth = 0
         for i, command in enumerate(commands):
-            command = command.replace("elsif", "elif")  # pseudocode to python
-            # append collon at end of control structures
+            # in python, 'elsif' is 'elif'
+            command = command.replace("elsif", "elif")
             if command[:2].isalpha():
+                # append collon at end of control structures
                 command += ":"
             elif any(command.startswith(f + ' ') for f in 'fblr'):
+                # turn calls to f,b,l and r into actual function calls
                 command = "{}({})".format(command[0], command[1:])
             if command.startswith('end'):
+                # 'end' structure decreases the python depth
                 depth -= 1
                 # we skip the rest of the loop to skip adding this to the
                 # structure list
                 continue
             elif any(command.startswith(f) for f in ('else', 'elif')):
+                # 'else' and 'elif' structure decreases the python depth
                 depth -= 1
+            # add the current command at the correct depth
             structure.append("\t"*depth + command)
-            if any(command.startswith(f) for f in ('if', 'while', 'for', 'else', 'elif')):
+            if any(command.startswith(f) for f in
+                    ('if', 'while', 'for', 'else', 'elif')):
+                # anything after a 'if', 'while', 'for', 'else' or 'elif'
+                # should be at an increased depth
                 depth += 1
         return structure
 
     def _evaluate(self, structures):
+        # translate structures into python
         structures = self._translate_structures(structures)
+        # create an output array and pin calls to f/l/r/b into appends in this
+        # output array
         output = []
         eval_globals = {
             'f': lambda x: output.append('f ' + str(x)),
@@ -119,6 +146,8 @@ class CommandGenerator(object):
             'r': lambda x: output.append('r ' + str(x)),
             'b': lambda x: output.append('b ' + str(x)),
         }
+        # execute the structures in a controlled environment that only contains
+        # our patched f/l/r/b functions
         exec("\n".join(structures), eval_globals, {})
         return output
 
@@ -131,7 +160,12 @@ class CommandGenerator(object):
 
 class HTTPHandler(http.server.BaseHTTPRequestHandler):
     output_server = None
+
     def do_POST(s):
+        """
+        Read the data from the post request (in UTF-8 encoding) and pushes the
+        result to the server given by the 'output_server' class variable
+        """
         print("Processing request")
         data_length = int(s.headers['Content-Length'])
         data = s.rfile.read(data_length).decode("utf-8")
