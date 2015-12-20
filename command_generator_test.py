@@ -15,8 +15,6 @@ def process(input_file, output_file):
     with open(input_file) as fd:
         input_raw = fd.read()
     processed_data = CommandGenerator(input_raw).output
-    print("result: ", processed_data)
-    print("expect: ", output_data)
     assert_dict_equal(processed_data, output_data)
 
 class TestCommandGenerator(unittest.TestCase):

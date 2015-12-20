@@ -1,6 +1,8 @@
 import json
 import re
 from operator import itemgetter
+import http.server
+import http.client
 import itertools as IT
 
 STRUCTURES_STR = [  
@@ -62,7 +64,7 @@ class CommandGenerator(object):
         commands_raw = filter(None, map(itemgetter(1), sorted_commands))
         # group sequences of numbers in the commands
         commands = []
-        for is_numbers, command_group in IT.groupby(commands_raw, unicode.isdigit):
+        for is_numbers, command_group in IT.groupby(commands_raw, str.isdigit):
             if is_numbers:
                 commands.append("".join(command_group))
             else:
@@ -122,3 +124,34 @@ class CommandGenerator(object):
 
     def _parse_output(self, output):
         return {'cmd'+str(i): cmd for i, cmd in enumerate(output, 1)}
+
+    def __str__(self):
+        return json.dumps(self.output)
+
+
+class HTTPHandler(http.server.BaseHTTPRequestHandler):
+    output_server = None
+    def do_POST(s):
+        print("Processing request")
+        data_length = int(s.headers['Content-Length'])
+        data = s.rfile.read(data_length).decode("utf-8")
+        commands = CommandGenerator(data)
+
+        s.send_response(200)
+        s.send_header("Content-type", "application/json")
+        s.end_headers()
+
+        conn = http.client.HTTPConnection(*s.output_server)
+        conn.request("PUT", "/update", str(commands))
+        conn.close()
+
+
+if __name__ == "__main__":
+    input_server = ("127.0.0.1", 9999)
+    output_server = ("127.0.0.1", 8081)
+
+    HTTPHandler.output_server = output_server
+    httpd = http.server.HTTPServer(input_server, HTTPHandler)
+    print("Command Generator active.")
+    print("Address = http://{}:{}".format(*input_server))
+    httpd.serve_forever()
